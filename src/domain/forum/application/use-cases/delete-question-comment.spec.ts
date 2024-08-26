@@ -3,6 +3,9 @@ import { InMemoryQuestionCommentsRepository } from "test/repositories/in-memory-
 
 import { makeQuestionComment } from "test/factories/make-question-comment"
 
+import { NotAllowedError } from "./errors/not-allowed-error"
+import { ResourceNotFoundError } from "./errors/resource-not-found-error"
+
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository
 let sut: DeleteQuestionCommentUseCase
 
@@ -27,24 +30,26 @@ describe('Delete Question Comment', async () => {
   it('should not be able to delete another user question comment', async () => {
     const questionComment = makeQuestionComment()
     await inMemoryQuestionCommentsRepository.create(questionComment)
+    
+    const result = await sut.execute({
+      authorId: 'author-2',
+      questionCommentId: questionComment.id.toString(),
+    })
 
-    await expect(() => {
-      return sut.execute({
-        authorId: 'another - author-1',
-        questionCommentId: questionComment.id.toString(),
-      })
-    }).rejects.toBeInstanceOf(Error)
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 
   it('should not be able to an non-existent question comment', async () => {
     const questionComment = makeQuestionComment()
     await inMemoryQuestionCommentsRepository.create(questionComment)
 
-    await expect(() => {
-      return sut.execute({
-        authorId: questionComment.authorId.toString(),
-        questionCommentId: 'questionComment-1',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      authorId: questionComment.authorId.toString(),
+      questionCommentId: 'questionComment-1',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

@@ -1,5 +1,3 @@
-import { describe, it, expect } from "vitest"
-
 import { CreateQuestionUseCase } from "./create-question"
 import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repository"
 
@@ -13,13 +11,13 @@ describe('Create Question', async () => {
   })
 
   it('should be able to create a question', async () => {
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       authorId: '1',
       title: 'Right?',
       content: 'Conteúdo da resposta',
     })
 
-    expect(question.id).toBeTruthy()
-    expect(inMemoryQuestionsRepository.items[0].id).toEqual(question.id)
+    expect(result.isRight()).toBe(true)
+    expect(inMemoryQuestionsRepository.items[0]).toEqual(result.value?.question)
   })
 })
