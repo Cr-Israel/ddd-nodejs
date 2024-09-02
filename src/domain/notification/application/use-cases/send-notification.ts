@@ -5,13 +5,13 @@ import { Notification } from "../../enterprise/entities/notification"
 
 import { NotificationsRepository } from "../repositories/notifications-repository"
 
-interface SendNotificationUseCaseRequest {
+export interface SendNotificationUseCaseRequest {
   recipientId: string
   title: string
   content: string
 }
 
-type SendNotificationUseCaseResponse = Either<null, {
+export type SendNotificationUseCaseResponse = Either<null, {
   notification: Notification
 }>
 
