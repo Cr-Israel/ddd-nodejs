@@ -1,7 +1,6 @@
 import { AnswerComment } from "@/domain/forum/enterprise/entities/answer-comment";
 import { AnswerCommentsRepository } from "@/domain/forum/application/repositories/answer-comments-repository";
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { DomainEvents } from "@/core/events/domain-events";
 
 export class InMemoryAnswerCommentsRepository implements AnswerCommentsRepository {
   public items: AnswerComment[] = []

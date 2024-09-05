@@ -5,7 +5,7 @@ import { Optional } from "@/core/types/optional"
 export interface AnswerCommentProps extends CommentProps {
   answerId: UniqueEntityID
 }
-// extends AggregateRoot<AnswerCommentProps>
+
 export class AnswerComment extends Comment<AnswerCommentProps> {
   get answerId() {
     return this.props.answerId
